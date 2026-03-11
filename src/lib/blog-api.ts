@@ -94,7 +94,8 @@ export function getRequestDominio(headers: Headers): string {
 }
 
 /**
- * URL absoluta do site (protocolo + host) para canonical, sitemap, etc.
+ * URL absoluta do site (protocolo + host, sem barra final) para canonical, sitemap, etc.
+ * Ex.: https://www.emcriciuma.com.br
  */
 export function getBaseUrl(headers: Headers): string {
   const host =
@@ -102,7 +103,8 @@ export function getBaseUrl(headers: Headers): string {
   const proto =
     headers.get("x-forwarded-proto") ||
     (process.env.NODE_ENV === "production" ? "https" : "http");
-  return `${proto}://${host}`;
+  const base = `${proto}://${host}`;
+  return base.replace(/\/$/, "");
 }
 
 /**

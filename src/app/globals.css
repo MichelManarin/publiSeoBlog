@@ -12,7 +12,7 @@
   --green-soft: #e8f5ef;
   --card: #ffffff;
   --accent: #b8860b;
-  --content-width: 720px;
+  --content-width: 900px;
   --content-width-wide: 1280px;
   --radius: 8px;
 }
@@ -56,6 +56,7 @@ body {
   margin-top: 1.75rem;
   margin-bottom: 0.75rem;
   line-height: 1.3;
+  scroll-margin-top: 2rem;
 }
 
 .article-content h1 { font-size: 1.75rem; }

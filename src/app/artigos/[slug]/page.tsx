@@ -9,6 +9,7 @@ import {
   getArtigosPorDominio,
   findArticleBySlug,
 } from "@/lib/blog-api";
+import { ArticleTableOfContents } from "@/components/blog/ArticleTableOfContents";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -35,12 +36,13 @@ export async function generateMetadata({
   if (!article)
     return { title: "Artigo não encontrado" };
   const baseUrl = getBaseUrl(headersList);
+  const canonical = `${baseUrl}/artigos/${slug}`;
   const title = blog?.nome ? `${article.title} | ${blog.nome}` : article.title;
   return {
     title,
     description: article.excerpt || undefined,
     alternates: {
-      canonical: `${baseUrl}/artigos/${slug}`,
+      canonical,
     },
   };
 }
@@ -78,10 +80,7 @@ export default async function ArticlePage({ params }: PageProps) {
         </p>
       </header>
 
-      <div
-        className="article-content"
-        dangerouslySetInnerHTML={{ __html: article.content.trim() }}
-      />
+      <ArticleTableOfContents html={article.content.trim()} />
     </article>
   );
 }
