@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 function slugify(text: string): string {
   return text
@@ -22,14 +22,14 @@ interface ArticleTableOfContentsProps {
 }
 
 export function ArticleTableOfContents({ html }: ArticleTableOfContentsProps) {
-  const contentRef = useRef<HTMLDivElement>(null);
   const [toc, setToc] = useState<TocEntry[]>([]);
+  const [htmlWithIds, setHtmlWithIds] = useState<string>(html);
 
   useEffect(() => {
-    const el = contentRef.current;
-    if (!el) return;
+    const wrap = document.createElement("div");
+    wrap.innerHTML = html;
 
-    const h2s = el.querySelectorAll<HTMLHeadingElement>("h2");
+    const h2s = wrap.querySelectorAll<HTMLHeadingElement>("h2");
     const entries: TocEntry[] = [];
     const usedIds = new Set<string>();
 
@@ -49,8 +49,20 @@ export function ArticleTableOfContents({ html }: ArticleTableOfContentsProps) {
       entries.push({ id, text });
     });
 
-    if (entries.length > 0) setToc(entries);
+    if (entries.length > 0) {
+      setToc(entries);
+      setHtmlWithIds(wrap.innerHTML);
+    }
   }, [html]);
+
+  function scrollToHeading(e: React.MouseEvent<HTMLAnchorElement>, id: string) {
+    e.preventDefault();
+    const target = document.getElementById(id);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.history.pushState(null, "", `#${id}`);
+    }
+  }
 
   return (
     <>
@@ -67,12 +79,7 @@ export function ArticleTableOfContents({ html }: ArticleTableOfContentsProps) {
               <li key={id}>
                 <a
                   href={`#${id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const target = contentRef.current?.querySelector(`#${CSS.escape(id)}`);
-                    target?.scrollIntoView({ behavior: "smooth", block: "start" });
-                    window.history.pushState(null, "", `#${id}`);
-                  }}
+                  onClick={(e) => scrollToHeading(e, id)}
                   className="text-sm text-[var(--soft-text)] underline underline-offset-2 hover:text-[var(--green)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none"
                 >
                   {text}
@@ -83,9 +90,8 @@ export function ArticleTableOfContents({ html }: ArticleTableOfContentsProps) {
         </nav>
       )}
       <div
-        ref={contentRef}
         className="article-content"
-        dangerouslySetInnerHTML={{ __html: html }}
+        dangerouslySetInnerHTML={{ __html: htmlWithIds }}
       />
     </>
   );
