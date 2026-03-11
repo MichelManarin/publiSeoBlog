@@ -67,6 +67,12 @@ export function ArticleTableOfContents({ html }: ArticleTableOfContentsProps) {
               <li key={id}>
                 <a
                   href={`#${id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const target = contentRef.current?.querySelector(`#${CSS.escape(id)}`);
+                    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    window.history.pushState(null, "", `#${id}`);
+                  }}
                   className="text-sm text-[var(--soft-text)] underline underline-offset-2 hover:text-[var(--green)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none"
                 >
                   {text}
