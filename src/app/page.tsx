@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { BlogHero } from "@/components/blog/BlogHero";
 import { BlogCard } from "@/components/blog/BlogCard";
@@ -8,14 +9,24 @@ import {
 
 export const dynamic = "force-dynamic";
 
+export async function generateMetadata(): Promise<Metadata> {
+  const headersList = await headers();
+  const dominio = getRequestDominio(headersList);
+  const { blog } = await getArtigosPorDominio(dominio);
+  return {
+    title: blog?.nome ? `${blog.nome}${blog.nicho ? ` — ${blog.nicho}` : ""}` : "Blog",
+    description: blog?.nicho ?? undefined,
+  };
+}
+
 export default async function Home() {
   const headersList = await headers();
   const dominio = getRequestDominio(headersList);
-  const { articles } = await getArtigosPorDominio(dominio);
+  const { articles, blog } = await getArtigosPorDominio(dominio);
 
   return (
     <>
-      <BlogHero />
+      <BlogHero blog={blog} />
 
       <section id="artigos" className="bg-[var(--bg)]">
         <div className="mx-auto max-w-[var(--content-width-wide)] px-4 py-12 sm:px-6 sm:py-16">
@@ -24,8 +35,7 @@ export default async function Home() {
           </h2>
           {articles.length === 0 ? (
             <p className="text-[var(--soft-text)]">
-              Nenhum blog encontrado para este domínio. Configure o domínio no
-              painel ou acesse por um domínio já cadastrado.
+              Nenhum blog encontrado para este domínio.
             </p>
           ) : (
             <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">

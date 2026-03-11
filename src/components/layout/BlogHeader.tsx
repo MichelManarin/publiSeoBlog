@@ -1,11 +1,18 @@
 import Link from "next/link";
+import type { BlogInfo } from "@/lib/blog-api";
 
 const nav = [
   { href: "/", label: "Início" },
   { href: "/#artigos", label: "Artigos" },
 ];
 
-export function BlogHeader() {
+interface BlogHeaderProps {
+  blog: BlogInfo | null;
+}
+
+export function BlogHeader({ blog }: BlogHeaderProps) {
+  const siteName = blog?.nome ?? "";
+
   return (
     <header className="border-b border-[var(--border)] bg-[var(--bg)]">
       <div className="mx-auto flex h-16 max-w-[var(--content-width-wide)] items-center justify-between gap-4 px-4 sm:px-6">
@@ -13,7 +20,7 @@ export function BlogHeader() {
           href="/"
           className="text-lg font-semibold text-[var(--text)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none"
         >
-          Publiseo
+          {siteName || "Blog"}
         </Link>
         <nav className="flex items-center gap-6" aria-label="Menu principal">
           {nav.map(({ href, label }) => (

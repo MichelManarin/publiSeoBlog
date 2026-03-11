@@ -29,12 +29,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const headersList = await headers();
   const dominio = getRequestDominio(headersList);
-  const { articles } = await getArtigosPorDominio(dominio);
+  const { articles, blog } = await getArtigosPorDominio(dominio);
   const article = findArticleBySlug(articles, slug);
   if (!article)
     return { title: "Artigo não encontrado" };
+  const title = blog?.nome ? `${article.title} | ${blog.nome}` : article.title;
   return {
-    title: article.title,
+    title,
     description: article.excerpt || undefined,
   };
 }

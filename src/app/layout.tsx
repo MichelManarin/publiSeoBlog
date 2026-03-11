@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { headers } from "next/headers";
 import "./globals.css";
 import { DashboardShell } from "@/components/layout/DashboardShell";
+import { getRequestDominio, getBlogPorDominio } from "@/lib/blog-api";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -10,19 +12,23 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Publiseo — Blog",
-  description: "Artigos e conteúdo Publiseo",
+  title: "Blog",
+  description: "",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const dominio = getRequestDominio(headersList);
+  const blog = await getBlogPorDominio(dominio);
+
   return (
     <html lang="pt-BR">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <DashboardShell>{children}</DashboardShell>
+        <DashboardShell blog={blog}>{children}</DashboardShell>
       </body>
     </html>
   );

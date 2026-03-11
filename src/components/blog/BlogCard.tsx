@@ -27,7 +27,8 @@ export function BlogCard({ article }: BlogCardProps) {
       />
       <div className="flex flex-1 flex-col p-5">
         <p className="text-xs text-[var(--muted)]">
-          {article.author ?? "Publiseo"} · {formatDate(article.publishedAt)}
+          {article.author ? `${article.author} · ` : ""}
+          {formatDate(article.publishedAt)}
         </p>
         <h2 className="mt-2 text-lg font-semibold leading-snug text-[var(--text)] group-hover:text-[var(--green)]">
           {article.title}

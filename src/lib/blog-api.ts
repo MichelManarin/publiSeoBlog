@@ -8,9 +8,15 @@ const API_BASE =
   process.env.NEXT_PUBLIC_PUBLISEO_API_URL ||
   "https://publiseobackend-production.up.railway.app";
 
+export interface BlogInfo {
+  externalId: string;
+  nome: string;
+  nicho?: string;
+}
+
 export interface ApiBlogPorDominioResponse {
   success: boolean;
-  data: { externalId: string } | null;
+  data: { externalId: string; nome?: string; nicho?: string } | null;
   statusCode: number;
   message: string | null;
   errors: unknown;
@@ -88,11 +94,11 @@ export function getRequestDominio(headers: Headers): string {
 }
 
 /**
- * Busca o externalId do blog pelo domínio de origem.
+ * Busca dados do blog pelo domínio de origem (externalId, nome, nicho).
  */
-export async function getBlogExternalIdByDominio(
+export async function getBlogPorDominio(
   dominio: string
-): Promise<string | null> {
+): Promise<BlogInfo | null> {
   if (!dominio) return null;
   const url = `${API_BASE}/api/public/blog/por-dominio?dominio=${encodeURIComponent(dominio)}`;
   if (process.env.NODE_ENV === "development") {
@@ -102,9 +108,13 @@ export async function getBlogExternalIdByDominio(
   const json: ApiBlogPorDominioResponse = await res.json();
   if (json.success && json.data?.externalId) {
     if (process.env.NODE_ENV === "development") {
-      console.log("[blog-api] externalId:", json.data.externalId);
+      console.log("[blog-api] blog:", json.data.externalId, json.data.nome);
     }
-    return json.data.externalId;
+    return {
+      externalId: json.data.externalId,
+      nome: json.data.nome ?? "",
+      nicho: json.data.nicho,
+    };
   }
   if (process.env.NODE_ENV === "development") {
     console.log("[blog-api] por-dominio resposta:", json.statusCode, json.message);
@@ -126,16 +136,16 @@ export async function getArtigosByExternalId(
 }
 
 /**
- * Obtém artigos do blog para o domínio da requisição.
- * Retorna [] se o domínio não tiver blog cadastrado.
+ * Obtém blog e artigos para o domínio da requisição.
+ * Retorna blog: null e articles: [] se o domínio não tiver blog cadastrado.
  */
 export async function getArtigosPorDominio(
   dominio: string
-): Promise<{ articles: Article[]; externalId: string | null }> {
-  const externalId = await getBlogExternalIdByDominio(dominio);
-  if (!externalId) return { articles: [], externalId: null };
-  const articles = await getArtigosByExternalId(externalId);
-  return { articles, externalId };
+): Promise<{ articles: Article[]; blog: BlogInfo | null }> {
+  const blog = await getBlogPorDominio(dominio);
+  if (!blog) return { articles: [], blog: null };
+  const articles = await getArtigosByExternalId(blog.externalId);
+  return { articles, blog };
 }
 
 export function findArticleBySlug(

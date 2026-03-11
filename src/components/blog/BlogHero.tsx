@@ -1,4 +1,13 @@
-export function BlogHero() {
+import type { BlogInfo } from "@/lib/blog-api";
+
+interface BlogHeroProps {
+  blog: BlogInfo | null;
+}
+
+export function BlogHero({ blog }: BlogHeroProps) {
+  const nome = blog?.nome ?? "";
+  const nicho = blog?.nicho;
+
   return (
     <section
       className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-20"
@@ -12,10 +21,16 @@ export function BlogHero() {
         }}
       />
       <div className="relative mx-auto max-w-[var(--content-width-wide)]">
-        <span className="text-sm font-medium text-white/90">Blog</span>
-        <h1 className="mt-2 max-w-2xl text-3xl font-semibold leading-tight text-white sm:text-4xl">
-          O Journal: SEO, Conteúdo e Marketing Digital
-        </h1>
+        {nome ? (
+          <>
+            <h1 className="text-3xl font-semibold leading-tight text-white sm:text-4xl">
+              {nome}
+            </h1>
+            {nicho ? (
+              <p className="mt-2 text-sm font-medium text-white/90">{nicho}</p>
+            ) : null}
+          </>
+        ) : null}
       </div>
     </section>
   );
