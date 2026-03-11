@@ -4,6 +4,7 @@ import { BlogHero } from "@/components/blog/BlogHero";
 import { BlogCard } from "@/components/blog/BlogCard";
 import {
   getRequestDominio,
+  getBaseUrl,
   getArtigosPorDominio,
 } from "@/lib/blog-api";
 
@@ -13,9 +14,13 @@ export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
   const dominio = getRequestDominio(headersList);
   const { blog } = await getArtigosPorDominio(dominio);
+  const baseUrl = getBaseUrl(headersList);
   return {
     title: blog?.nome ? `${blog.nome}${blog.nicho ? ` — ${blog.nicho}` : ""}` : "Blog",
     description: blog?.nicho ?? undefined,
+    alternates: {
+      canonical: baseUrl,
+    },
   };
 }
 

@@ -1,14 +1,9 @@
 import { headers } from "next/headers";
-import { getRequestDominio, getArtigosPorDominio } from "@/lib/blog-api";
-
-function getBaseUrl(headersList: Headers): string {
-  const host =
-    headersList.get("x-forwarded-host") || headersList.get("host") || "";
-  const proto =
-    headersList.get("x-forwarded-proto") ||
-    (process.env.NODE_ENV === "production" ? "https" : "http");
-  return `${proto}://${host}`;
-}
+import {
+  getRequestDominio,
+  getBaseUrl,
+  getArtigosPorDominio,
+} from "@/lib/blog-api";
 
 export const dynamic = "force-dynamic";
 

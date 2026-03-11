@@ -94,6 +94,18 @@ export function getRequestDominio(headers: Headers): string {
 }
 
 /**
+ * URL absoluta do site (protocolo + host) para canonical, sitemap, etc.
+ */
+export function getBaseUrl(headers: Headers): string {
+  const host =
+    headers.get("x-forwarded-host") || headers.get("host") || "";
+  const proto =
+    headers.get("x-forwarded-proto") ||
+    (process.env.NODE_ENV === "production" ? "https" : "http");
+  return `${proto}://${host}`;
+}
+
+/**
  * Busca dados do blog pelo domínio de origem (externalId, nome, nicho).
  */
 export async function getBlogPorDominio(

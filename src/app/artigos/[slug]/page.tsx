@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import {
   getRequestDominio,
+  getBaseUrl,
   getArtigosPorDominio,
   findArticleBySlug,
 } from "@/lib/blog-api";
@@ -33,10 +34,14 @@ export async function generateMetadata({
   const article = findArticleBySlug(articles, slug);
   if (!article)
     return { title: "Artigo não encontrado" };
+  const baseUrl = getBaseUrl(headersList);
   const title = blog?.nome ? `${article.title} | ${blog.nome}` : article.title;
   return {
     title,
     description: article.excerpt || undefined,
+    alternates: {
+      canonical: `${baseUrl}/artigos/${slug}`,
+    },
   };
 }
 
