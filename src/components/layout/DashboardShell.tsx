@@ -1,6 +1,7 @@
 import type { BlogInfo } from "@/lib/blog-api";
 import { BlogHeader } from "./BlogHeader";
 import { Main } from "./Main";
+import { Footer } from "./Footer";
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -9,9 +10,10 @@ interface DashboardShellProps {
 
 export function DashboardShell({ children, blog }: DashboardShellProps) {
   return (
-    <div className="min-h-screen bg-[var(--page)]">
+    <div className="flex min-h-screen flex-col bg-[var(--page)]">
       <BlogHeader blog={blog} />
       <Main>{children}</Main>
+      <Footer blog={blog} />
     </div>
   );
 }

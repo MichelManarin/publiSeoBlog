@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { BlogHero } from "@/components/blog/BlogHero";
+// import { BlogHero } from "@/components/blog/BlogHero";
 import { BlogCard } from "@/components/blog/BlogCard";
+import { EmptyState } from "@/components/blog/EmptyState";
 import {
   getRequestDominio,
   getBaseUrl,
@@ -17,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = getBaseUrl(headersList);
   return {
     title: blog?.nome ? `${blog.nome}${blog.nicho ? ` — ${blog.nicho}` : ""}` : "Blog",
-    description: blog?.nicho ?? undefined,
+    description: blog?.descricao ?? blog?.nicho ?? undefined,
     alternates: {
       canonical: baseUrl,
     },
@@ -31,19 +32,19 @@ export default async function Home() {
 
   return (
     <>
+      {/* Hero section desativado
       <BlogHero blog={blog} featuredArticle={articles[0] ?? null} />
+      */}
 
-      <section id="artigos" className="bg-[var(--bg)]">
-        <div className="mx-auto max-w-[var(--content-width-wide)] px-4 py-12 sm:px-6 sm:py-16">
-          <h2 className="mb-8 text-base font-semibold uppercase tracking-wider text-[var(--muted)]">
+      <section id="artigos" className="bg-[var(--bg)] py-20 sm:py-24">
+        <div className="mx-auto max-w-[var(--content-width-wide)] px-4 sm:px-6">
+          <h2 className="font-heading mb-10 text-xl font-normal tracking-tight text-[var(--text)] sm:text-2xl">
             Artigos recentes
           </h2>
           {articles.length === 0 ? (
-            <p className="text-[var(--soft-text)]">
-              Nenhum blog encontrado para este domínio.
-            </p>
+            <EmptyState hasBlog={!!blog} />
           ) : (
-            <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
               {articles.map((article) => (
                 <li key={article.id}>
                   <BlogCard article={article} />

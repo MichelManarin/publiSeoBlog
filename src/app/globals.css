@@ -2,19 +2,21 @@
 
 :root {
   --bg: #ffffff;
-  --page: #faf9f7;
-  --border: #e8e4de;
-  --muted: #8a8681;
-  --text: #1a1918;
-  --soft-text: #5c5854;
+  --page: #fafaf8;
+  --border: #e5e7eb;
+  --muted: #6b7280;
+  --text: #111827;
+  --soft-text: #6b7280;
   --green: #0f7c4a;
   --green-dark: #0a5c38;
   --green-soft: #e8f5ef;
   --card: #ffffff;
   --accent: #b8860b;
   --content-width: 900px;
-  --content-width-wide: 1280px;
+  --content-width-wide: 1200px;
   --radius: 8px;
+  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.05);
+  --shadow-card: 0 4px 6px -1px rgba(17, 24, 39, 0.07), 0 2px 4px -2px rgba(17, 24, 39, 0.05);
 }
 
 @theme inline {
@@ -27,6 +29,7 @@
   --color-green: var(--green);
   --color-card: var(--card);
   --font-sans: var(--font-inter);
+  --font-serif: var(--font-serif);
 }
 
 html {
@@ -40,6 +43,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
+}
+
+.font-heading {
+  font-family: var(--font-serif), Georgia, serif;
 }
 
 /* Conteúdo de artigo: HTML vindo da API é renderizado aqui (dangerouslySetInnerHTML) */

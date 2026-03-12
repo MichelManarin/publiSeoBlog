@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import type { BlogInfo } from "@/lib/blog-api";
 
 const nav = [
@@ -12,13 +15,24 @@ interface BlogHeaderProps {
 
 export function BlogHeader({ blog }: BlogHeaderProps) {
   const siteName = blog?.nome ?? "";
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="border-b border-[var(--border)] bg-[var(--bg)]">
-      <div className="mx-auto flex h-16 max-w-[var(--content-width-wide)] items-center justify-between gap-4 px-4 sm:px-6">
+    <header
+      className={`sticky top-0 z-50 border-b border-[var(--border)] transition-[background-color,border-color,box-shadow] duration-200 ${
+        scrolled ? "border-[var(--border)] bg-white/80 shadow-[var(--shadow-sm)] backdrop-blur-md" : "bg-[var(--bg)]"
+      }`}
+    >
+      <div className="mx-auto flex min-h-[4.5rem] max-w-[var(--content-width-wide)] items-center justify-between gap-4 px-4 py-4 sm:min-h-[5rem] sm:px-6">
         <Link
           href="/"
-          className="text-lg font-semibold text-[var(--text)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="font-heading text-xl font-normal text-[var(--text)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none sm:text-2xl"
         >
           {siteName || "Blog"}
         </Link>
@@ -35,7 +49,7 @@ export function BlogHeader({ blog }: BlogHeaderProps) {
         </nav>
         <Link
           href="/#artigos"
-          className="shrink-0 rounded-[var(--radius)] bg-[var(--green)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--green-dark)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="shrink-0 rounded-[var(--radius)] bg-[var(--green)] px-4 py-2.5 text-sm font-medium text-white hover:bg-[var(--green-dark)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           Ver artigos
         </Link>

@@ -20,7 +20,7 @@ export function BlogHero({ blog, featuredArticle }: BlogHeroProps) {
 
   return (
     <section
-      className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-20"
+      className="relative overflow-hidden px-4 py-20 sm:px-6 sm:py-24"
       style={{ background: "var(--green)" }}
     >
       <div
@@ -34,7 +34,7 @@ export function BlogHero({ blog, featuredArticle }: BlogHeroProps) {
         <div>
           {nome ? (
             <>
-              <h1 className="text-3xl font-semibold leading-tight text-white sm:text-4xl">
+              <h1 className="font-heading text-3xl font-normal leading-tight text-white sm:text-4xl">
                 {nome}
               </h1>
               {descricao ? (
