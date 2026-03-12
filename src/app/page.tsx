@@ -31,7 +31,7 @@ export default async function Home() {
 
   return (
     <>
-      <BlogHero blog={blog} />
+      <BlogHero blog={blog} featuredArticle={articles[0] ?? null} />
 
       <section id="artigos" className="bg-[var(--bg)]">
         <div className="mx-auto max-w-[var(--content-width-wide)] px-4 py-12 sm:px-6 sm:py-16">
