@@ -12,11 +12,12 @@ export interface BlogInfo {
   externalId: string;
   nome: string;
   nicho?: string;
+  descricao?: string;
 }
 
 export interface ApiBlogPorDominioResponse {
   success: boolean;
-  data: { externalId: string; nome?: string; nicho?: string } | null;
+  data: { externalId: string; nome?: string; nicho?: string; descricao?: string } | null;
   statusCode: number;
   message: string | null;
   errors: unknown;
@@ -128,6 +129,7 @@ export async function getBlogPorDominio(
       externalId: json.data.externalId,
       nome: json.data.nome ?? "",
       nicho: json.data.nicho,
+      descricao: json.data.descricao,
     };
   }
   if (process.env.NODE_ENV === "development") {

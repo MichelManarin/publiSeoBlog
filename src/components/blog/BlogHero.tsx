@@ -6,6 +6,7 @@ interface BlogHeroProps {
 
 export function BlogHero({ blog }: BlogHeroProps) {
   const nome = blog?.nome ?? "";
+  const descricao = blog?.descricao;
   const nicho = blog?.nicho;
 
   return (
@@ -26,8 +27,13 @@ export function BlogHero({ blog }: BlogHeroProps) {
             <h1 className="text-3xl font-semibold leading-tight text-white sm:text-4xl">
               {nome}
             </h1>
+            {descricao ? (
+              <p className="mt-2 text-base leading-relaxed text-white/90">
+                {descricao}
+              </p>
+            ) : null}
             {nicho ? (
-              <p className="mt-2 text-sm font-medium text-white/90">{nicho}</p>
+              <p className="mt-2 text-sm font-medium text-white/80">{nicho}</p>
             ) : null}
           </>
         ) : null}
