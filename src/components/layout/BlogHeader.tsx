@@ -30,12 +30,14 @@ export function BlogHeader({ blog }: BlogHeaderProps) {
       }`}
     >
       <div className="mx-auto flex min-h-[4.5rem] max-w-[var(--content-width-wide)] items-center justify-between gap-4 px-4 py-4 sm:min-h-[5rem] sm:px-6">
-        <Link
-          href="/"
-          className="font-heading text-xl font-normal text-[var(--text)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none sm:text-2xl"
-        >
-          {siteName || "Blog"}
-        </Link>
+        <h1 className="text-xl font-normal sm:text-2xl">
+          <Link
+            href="/"
+            className="font-heading text-[var(--text)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none"
+          >
+            {siteName || "Blog"}
+          </Link>
+        </h1>
         <nav className="flex items-center gap-6" aria-label="Menu principal">
           {nav.map(({ href, label }) => (
             <Link
