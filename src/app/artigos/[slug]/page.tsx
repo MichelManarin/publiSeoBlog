@@ -80,6 +80,21 @@ export default async function ArticlePage({ params }: PageProps) {
         </p>
       </header>
 
+      {article.imagemCapaUrl ? (
+        <figure className="mb-10 w-full">
+          <img
+            src={article.imagemCapaUrl}
+            alt={article.title}
+            className="w-full max-w-full object-contain"
+          />
+          {article.imagemCapaAttribution ? (
+            <figcaption className="mt-2 text-right text-xs text-[var(--muted)]">
+              {article.imagemCapaAttribution}
+            </figcaption>
+          ) : null}
+        </figure>
+      ) : null}
+
       <ArticleTableOfContents html={article.content.trim()} />
     </article>
   );

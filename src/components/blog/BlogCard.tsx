@@ -14,17 +14,38 @@ function formatDate(dateStr: string) {
 }
 
 export function BlogCard({ article }: BlogCardProps) {
+  const hasCapa = article.imagemCapaUrl;
+
   return (
     <Link
       href={`/artigos/${article.slug}`}
       className="group flex flex-col overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-card)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_-4px_rgba(17,24,39,0.08)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none"
     >
-      <div
-        className="aspect-[16/10] w-full shrink-0"
-        style={{
-          background: `linear-gradient(135deg, var(--green-soft) 0%, var(--page) 100%)`,
-        }}
-      />
+      <div className="relative w-full shrink-0 overflow-hidden bg-[var(--page)]">
+        {hasCapa ? (
+          <>
+            <div className="aspect-[16/10] w-full">
+              <img
+                src={article.imagemCapaUrl!}
+                alt=""
+                className="h-full w-full object-contain"
+              />
+            </div>
+            {article.imagemCapaAttribution ? (
+              <p className="px-3 py-1.5 text-right text-[10px] text-[var(--muted)]">
+                {article.imagemCapaAttribution}
+              </p>
+            ) : null}
+          </>
+        ) : (
+          <div
+            className="aspect-[16/10] w-full"
+            style={{
+              background: `linear-gradient(135deg, var(--green-soft) 0%, var(--page) 100%)`,
+            }}
+          />
+        )}
+      </div>
       <div className="flex flex-1 flex-col p-6">
         <span
           className="inline-block w-fit rounded-full bg-[var(--green-soft)] px-3 py-1 text-xs font-medium text-[var(--green-dark)]"

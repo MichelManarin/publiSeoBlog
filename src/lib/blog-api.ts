@@ -29,6 +29,8 @@ export interface ApiArtigoItem {
   dataPublicacao: string;
   conteudo: string;
   autor: string;
+  imagemCapaUrl?: string | null;
+  imagemCapaAttribution?: string | null;
 }
 
 export interface ApiArtigosResponse {
@@ -49,6 +51,8 @@ export interface Article {
   category: string;
   readTimeMinutes: number;
   author?: string;
+  imagemCapaUrl?: string | null;
+  imagemCapaAttribution?: string | null;
 }
 
 function slugify(text: string): string {
@@ -79,6 +83,8 @@ function mapApiItemToArticle(item: ApiArtigoItem, index: number): Article {
     category: "Artigo",
     readTimeMinutes: estimateReadTimeMinutes(item.conteudo || ""),
     author: item.autor || undefined,
+    imagemCapaUrl: item.imagemCapaUrl ?? null,
+    imagemCapaAttribution: item.imagemCapaAttribution ?? null,
   };
 }
 

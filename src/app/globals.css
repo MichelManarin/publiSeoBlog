@@ -136,6 +136,23 @@ body {
   max-width: 100%;
   height: auto;
   border-radius: var(--radius);
+  object-fit: contain;
+  display: block;
+}
+
+.article-content figure {
+  margin: 1.5rem 0;
+}
+
+.article-content figure img {
+  width: 100%;
+}
+
+.article-content figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  text-align: right;
 }
 
 .article-content pre,
