@@ -83,7 +83,7 @@ export function ConversorWidget({ blogExternalId, articleId }: ConversorWidgetPr
       nomeCompleto,
       telefone,
       respostas: todasRespostas,
-      ...(articleId != null && articleId !== "" && { artigoId }),
+      ...(articleId != null && articleId !== "" ? { artigoId: articleId } : {}),
     });
     setSending(false);
     if (!ok) {
