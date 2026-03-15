@@ -17,9 +17,11 @@ const ATENDENTE_NOME = "Ana";
 
 interface ConversorWidgetProps {
   blogExternalId: string | undefined;
+  /** ID do artigo (GUID) quando o visitante está na página do artigo; opcional para análise no painel */
+  articleId?: string | null;
 }
 
-export function ConversorWidget({ blogExternalId }: ConversorWidgetProps) {
+export function ConversorWidget({ blogExternalId, articleId }: ConversorWidgetProps) {
   const [config, setConfig] = useState<ConversorConfig | null>(null);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -81,6 +83,7 @@ export function ConversorWidget({ blogExternalId }: ConversorWidgetProps) {
       nomeCompleto,
       telefone,
       respostas: todasRespostas,
+      ...(articleId != null && articleId !== "" && { artigoId }),
     });
     setSending(false);
     if (!ok) {

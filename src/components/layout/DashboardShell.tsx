@@ -1,4 +1,5 @@
 import type { BlogInfo } from "@/lib/blog-api";
+import { ConversorArticleProvider } from "@/contexts/ConversorArticleContext";
 import { BlogHeader } from "./BlogHeader";
 import { Main } from "./Main";
 import { Footer } from "./Footer";
@@ -11,11 +12,13 @@ interface DashboardShellProps {
 
 export function DashboardShell({ children, blog }: DashboardShellProps) {
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--page)]">
-      <BlogHeader blog={blog} />
-      <Main>{children}</Main>
-      <Footer blog={blog} />
-      <ConversorWidgetLoader blogExternalId={blog?.externalId} />
-    </div>
+    <ConversorArticleProvider>
+      <div className="flex min-h-screen flex-col bg-[var(--page)]">
+        <BlogHeader blog={blog} />
+        <Main>{children}</Main>
+        <Footer blog={blog} />
+        <ConversorWidgetLoader blogExternalId={blog?.externalId} />
+      </div>
+    </ConversorArticleProvider>
   );
 }

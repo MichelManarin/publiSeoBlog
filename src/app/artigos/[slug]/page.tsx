@@ -10,6 +10,7 @@ import {
   findArticleBySlug,
 } from "@/lib/blog-api";
 import { ArticleTableOfContents } from "@/components/blog/ArticleTableOfContents";
+import { SetConversorArticleId } from "@/components/conversor/SetConversorArticleId";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -58,6 +59,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
   return (
     <article className="mx-auto max-w-[var(--content-width)] px-4 py-10 sm:px-6">
+      <SetConversorArticleId articleId={article.id} />
       <Link
         href="/"
         className="mb-8 inline-flex items-center gap-2 text-sm text-[var(--soft-text)] hover:text-[var(--text)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none"

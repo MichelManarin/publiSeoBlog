@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useConversorArticleId } from "@/contexts/ConversorArticleContext";
 
 const ConversorWidget = dynamic(
   () =>
@@ -13,5 +14,8 @@ interface ConversorWidgetLoaderProps {
 }
 
 export function ConversorWidgetLoader({ blogExternalId }: ConversorWidgetLoaderProps) {
-  return <ConversorWidget blogExternalId={blogExternalId} />;
+  const articleId = useConversorArticleId();
+  return (
+    <ConversorWidget blogExternalId={blogExternalId} articleId={articleId} />
+  );
 }
