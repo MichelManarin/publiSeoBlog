@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
 import {
   getConversorConfig,
   postConversorLead,
   type ConversorConfig,
   type ConversorPergunta,
-  type TipoCampo,
 } from "@/lib/conversor-api";
 
-// Avatar de atendente (Ana)
+// Avatar de atendente (Ana) – import estático para build
 import avatarImg from "@/assets/avatar.png";
+
+const avatarSrc = typeof avatarImg === "string" ? avatarImg : avatarImg.src;
 
 const ATENDENTE_NOME = "Ana";
 
@@ -126,12 +126,10 @@ export function ConversorWidget({ blogExternalId }: ConversorWidgetProps) {
         aria-label={config.textoBotaoInicial}
       >
         <span className="relative flex h-14 w-14 overflow-hidden rounded-full border-2 border-white shadow-lg sm:h-16 sm:w-16">
-          <Image
-            src={avatarImg}
+          <img
+            src={avatarSrc}
             alt=""
-            fill
-            className="object-cover"
-            sizes="64px"
+            className="h-full w-full object-cover"
           />
         </span>
         <span className="rounded-full bg-[var(--green)] px-2 py-0.5 text-xs font-medium text-white">
@@ -155,12 +153,10 @@ export function ConversorWidget({ blogExternalId }: ConversorWidgetProps) {
             <div className="flex items-center justify-between border-b border-[var(--border)] p-3">
               <div className="flex items-center gap-2">
                 <span className="relative flex h-9 w-9 overflow-hidden rounded-full">
-                  <Image
-                    src={avatarImg}
+                  <img
+                    src={avatarSrc}
                     alt=""
-                    fill
-                    className="object-cover"
-                    sizes="36px"
+                    className="h-full w-full object-cover"
                   />
                 </span>
                 <span className="font-medium text-[var(--text)]">
