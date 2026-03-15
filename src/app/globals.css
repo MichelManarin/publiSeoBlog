@@ -181,30 +181,30 @@ body {
   background: none;
 }
 
-/* Balão do widget conversor: rabinho apontando para o avatar */
+/* Balão do widget conversor: rabinho à direita apontando para o avatar */
 .conversor-bubble {
   position: relative;
-  margin-left: 4px;
+  margin-right: 4px;
 }
 
 .conversor-bubble::before {
   content: "";
   position: absolute;
-  left: -8px;
+  right: -8px;
   bottom: 20px;
   border: 8px solid transparent;
-  border-right-color: white;
-  border-left-width: 0;
+  border-left-color: white;
+  border-right-width: 0;
 }
 
 .conversor-bubble::after {
   content: "";
   position: absolute;
-  left: -9px;
+  right: -9px;
   bottom: 19px;
   border: 8px solid transparent;
-  border-right-color: var(--border);
-  border-left-width: 0;
+  border-left-color: var(--border);
+  border-right-width: 0;
   z-index: -1;
 }
 

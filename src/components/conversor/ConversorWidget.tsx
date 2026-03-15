@@ -28,6 +28,8 @@ export function ConversorWidget({ blogExternalId }: ConversorWidgetProps) {
   const [currentValue, setCurrentValue] = useState("");
   const [sending, setSending] = useState(false);
   const [finalMessage, setFinalMessage] = useState<string | null>(null);
+  const [showWhatsAppChoice, setShowWhatsAppChoice] = useState(false);
+  const [bubbleDismissed, setBubbleDismissed] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const perguntasOrdenadas: ConversorPergunta[] = config?.perguntas
@@ -88,15 +90,27 @@ export function ConversorWidget({ blogExternalId }: ConversorWidgetProps) {
     if (config.tipoFinalizacao === 0 && config.mensagemFinalizacao) {
       setFinalMessage(config.mensagemFinalizacao);
     } else if (config.tipoFinalizacao === 1 && config.whatsAppNumero) {
-      const base = `https://wa.me/${config.whatsAppNumero.replace(/\D/g, "")}`;
-      const text = config.whatsAppTextoPreDefinido
-        ? `?text=${encodeURIComponent(config.whatsAppTextoPreDefinido)}`
-        : "";
-      window.open(`${base}${text}`, "_blank", "noopener,noreferrer");
+      setShowWhatsAppChoice(true);
     } else {
       setFinalMessage("Obrigado! Entraremos em contato.");
     }
   };
+
+  const openWhatsApp = useCallback(() => {
+    if (!config?.whatsAppNumero) return;
+    const base = `https://wa.me/${config.whatsAppNumero.replace(/\D/g, "")}`;
+    const text = config.whatsAppTextoPreDefinido
+      ? `?text=${encodeURIComponent(config.whatsAppTextoPreDefinido)}`
+      : "";
+    window.open(`${base}${text}`, "_blank", "noopener,noreferrer");
+    setShowWhatsAppChoice(false);
+    setFinalMessage("Pronto! Verifique a nova guia do WhatsApp.");
+  }, [config]);
+
+  const chooseContactLater = useCallback(() => {
+    setShowWhatsAppChoice(false);
+    setFinalMessage("Certo! Entraremos em contato em breve.");
+  }, []);
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -104,6 +118,7 @@ export function ConversorWidget({ blogExternalId }: ConversorWidgetProps) {
     setRespostas([]);
     setCurrentValue("");
     setFinalMessage(null);
+    setShowWhatsAppChoice(false);
     setError(null);
   }, []);
 
@@ -118,15 +133,39 @@ export function ConversorWidget({ blogExternalId }: ConversorWidgetProps) {
 
   return (
     <>
-      {/* Widget flutuante: avatar à esquerda + balão com mensagem inicial à direita */}
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-end gap-0 focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none"
-        aria-label={config.textoBotaoInicial}
-      >
-        {/* Avatar com indicador online (esquerda) */}
-        <span className="relative order-1 flex shrink-0 sm:mr-1">
+      {/* Widget flutuante: mensagem à esquerda (com X) + avatar à direita */}
+      <div className="fixed bottom-6 right-6 z-40 flex items-end gap-0">
+        {!bubbleDismissed && (
+          <span
+            className="conversor-bubble order-1 relative max-w-[260px] rounded-2xl bg-white px-4 py-3 pr-8 text-left text-sm leading-relaxed text-[var(--text)] shadow-lg ring-1 ring-[var(--border)] sm:max-w-[280px]"
+            role="button"
+            tabIndex={0}
+            onClick={() => setOpen(true)}
+            onKeyDown={(e) => e.key === "Enter" && setOpen(true)}
+            aria-label={config.textoBotaoInicial}
+          >
+            {config.textoBotaoInicial}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setBubbleDismissed(true);
+              }}
+              className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full text-[var(--muted)] hover:bg-[var(--page)] hover:text-[var(--text)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:outline-none"
+              aria-label="Fechar mensagem"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </span>
+        )}
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="relative order-2 flex shrink-0 focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none sm:ml-1"
+          aria-label={config.textoBotaoInicial}
+        >
           <span className="relative flex h-14 w-14 overflow-hidden rounded-full border-2 border-white shadow-lg sm:h-16 sm:w-16">
             <img
               src={avatarSrc}
@@ -138,12 +177,8 @@ export function ConversorWidget({ blogExternalId }: ConversorWidgetProps) {
               aria-hidden
             />
           </span>
-        </span>
-        {/* Balão de mensagem (direita) com rabinho apontando para o avatar */}
-        <span className="conversor-bubble order-2 rounded-2xl bg-white px-4 py-3 text-left text-sm leading-relaxed text-[var(--text)] shadow-lg ring-1 ring-[var(--border)] max-w-[260px] sm:max-w-[280px]">
-          {config.textoBotaoInicial}
-        </span>
-      </button>
+        </button>
+      </div>
 
       {/* Caixa de chat pequena - flutuante no canto */}
       {open && (
@@ -196,7 +231,34 @@ export function ConversorWidget({ blogExternalId }: ConversorWidgetProps) {
                     {error}
                   </p>
                 )}
-                {finalMessage ? (
+                {showWhatsAppChoice ? (
+                  <>
+                    <div className="mb-3 flex gap-2">
+                      <span className="flex h-7 w-7 shrink-0 overflow-hidden rounded-full">
+                        <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
+                      </span>
+                      <p className="rounded-2xl rounded-bl-md bg-[var(--page)] px-3 py-2 text-sm text-[var(--text)]">
+                        Obrigado! Como prefere seguir?
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-2 pl-9">
+                      <button
+                        type="button"
+                        onClick={openWhatsApp}
+                        className="w-full rounded-xl bg-[var(--green)] px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-[var(--green-dark)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:outline-none"
+                      >
+                        Redirecionar para WhatsApp
+                      </button>
+                      <button
+                        type="button"
+                        onClick={chooseContactLater}
+                        className="w-full rounded-xl border border-[var(--border)] bg-white px-4 py-2.5 text-center text-sm font-medium text-[var(--text)] hover:bg-[var(--page)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:outline-none"
+                      >
+                        Prefiro que entrem em contato
+                      </button>
+                    </div>
+                  </>
+                ) : finalMessage ? (
                   <div className="flex gap-2">
                     <span className="flex h-7 w-7 shrink-0 overflow-hidden rounded-full">
                       <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
@@ -238,7 +300,7 @@ export function ConversorWidget({ blogExternalId }: ConversorWidgetProps) {
               </div>
 
               {/* Input fixo no rodapé */}
-              {!finalMessage && (
+              {!finalMessage && !showWhatsAppChoice && (
                 <div className="shrink-0 border-t border-[var(--border)] p-3">
                   <div className="flex gap-2">
                     <input
