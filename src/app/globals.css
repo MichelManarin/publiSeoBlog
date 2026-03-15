@@ -180,3 +180,46 @@ body {
   padding: 0;
   background: none;
 }
+
+/* Balão do widget conversor: rabinho apontando para o avatar */
+.conversor-bubble {
+  position: relative;
+  margin-left: 4px;
+}
+
+.conversor-bubble::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  bottom: 20px;
+  border: 8px solid transparent;
+  border-right-color: white;
+  border-left-width: 0;
+}
+
+.conversor-bubble::after {
+  content: "";
+  position: absolute;
+  left: -9px;
+  bottom: 19px;
+  border: 8px solid transparent;
+  border-right-color: var(--border);
+  border-left-width: 0;
+  z-index: -1;
+}
+
+/* Caixa do chat conversor: abertura suave */
+.conversor-chat-box {
+  animation: conversorChatBoxIn 0.2s ease-out;
+}
+
+@keyframes conversorChatBoxIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

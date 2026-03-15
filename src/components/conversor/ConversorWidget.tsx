@@ -92,7 +92,7 @@ export function ConversorWidget({ blogExternalId }: ConversorWidgetProps) {
       const text = config.whatsAppTextoPreDefinido
         ? `?text=${encodeURIComponent(config.whatsAppTextoPreDefinido)}`
         : "";
-      window.location.href = `${base}${text}`;
+      window.open(`${base}${text}`, "_blank", "noopener,noreferrer");
     } else {
       setFinalMessage("Obrigado! Entraremos em contato.");
     }
@@ -118,108 +118,152 @@ export function ConversorWidget({ blogExternalId }: ConversorWidgetProps) {
 
   return (
     <>
-      {/* Botão flutuante - avatar Ana */}
+      {/* Widget flutuante: avatar à esquerda + balão com mensagem inicial à direita */}
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-1 rounded-full focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="fixed bottom-6 right-6 z-40 flex items-end gap-0 focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none"
         aria-label={config.textoBotaoInicial}
       >
-        <span className="relative flex h-14 w-14 overflow-hidden rounded-full border-2 border-white shadow-lg sm:h-16 sm:w-16">
-          <img
-            src={avatarSrc}
-            alt=""
-            className="h-full w-full object-cover"
-          />
+        {/* Avatar com indicador online (esquerda) */}
+        <span className="relative order-1 flex shrink-0 sm:mr-1">
+          <span className="relative flex h-14 w-14 overflow-hidden rounded-full border-2 border-white shadow-lg sm:h-16 sm:w-16">
+            <img
+              src={avatarSrc}
+              alt=""
+              className="h-full w-full object-cover"
+            />
+            <span
+              className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-[var(--green)]"
+              aria-hidden
+            />
+          </span>
         </span>
-        <span className="rounded-full bg-[var(--green)] px-2 py-0.5 text-xs font-medium text-white">
-          {ATENDENTE_NOME}
+        {/* Balão de mensagem (direita) com rabinho apontando para o avatar */}
+        <span className="conversor-bubble order-2 rounded-2xl bg-white px-4 py-3 text-left text-sm leading-relaxed text-[var(--text)] shadow-lg ring-1 ring-[var(--border)] max-w-[260px] sm:max-w-[280px]">
+          {config.textoBotaoInicial}
         </span>
       </button>
 
-      {/* Painel lateral direito */}
+      {/* Caixa de chat pequena - flutuante no canto */}
       {open && (
         <div
-          className="fixed inset-0 z-50 flex justify-end bg-black/20 sm:bg-transparent"
+          className="fixed inset-0 z-50 flex items-end justify-end p-4 pb-24 sm:p-6 sm:pb-28"
           role="dialog"
           aria-label="Chat de atendimento"
           onClick={handleClose}
         >
+          {/* Overlay suave */}
+          <div className="absolute inset-0 bg-black/15 backdrop-blur-[2px]" aria-hidden />
+
           <div
-            className="flex h-full max-h-[80vh] w-full max-w-md flex-col bg-white shadow-xl sm:rounded-l-xl sm:border-l sm:border-t sm:border-[var(--border)]"
+            className="conversor-chat-box relative flex h-[420px] w-full max-w-[380px] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 transition-all duration-200 ease-out"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Cabeçalho - minimizar */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] p-3">
-              <div className="flex items-center gap-2">
-                <span className="relative flex h-9 w-9 overflow-hidden rounded-full">
-                  <img
-                    src={avatarSrc}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
-                </span>
-                <span className="font-medium text-[var(--text)]">
-                  {ATENDENTE_NOME}
-                </span>
+            {/* Cabeçalho */}
+            <div
+              className="flex shrink-0 items-center gap-3 px-4 py-3 text-white"
+              style={{ background: "var(--green)" }}
+            >
+              <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full ring-2 ring-white/30">
+                <img
+                  src={avatarSrc}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-medium truncate">{ATENDENTE_NOME}</p>
+                <p className="text-xs text-white/85">Online agora</p>
               </div>
               <button
                 type="button"
                 onClick={handleClose}
-                className="rounded p-1 text-[var(--muted)] hover:bg-[var(--page)] hover:text-[var(--text)] focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:outline-none"
-                aria-label="Minimizar"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
+                aria-label="Fechar"
               >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            {/* Conteúdo */}
-            <div className="flex flex-1 flex-col overflow-y-auto p-4">
-              {error && (
-                <p className="mb-3 rounded-lg bg-red-50 p-2 text-sm text-red-700">
-                  {error}
-                </p>
-              )}
-              {finalMessage ? (
-                <p className="text-[var(--soft-text)] leading-relaxed">
-                  {finalMessage}
-                </p>
-              ) : (
-                <>
-                  <p className="mb-4 text-sm font-medium text-[var(--text)]">
-                    {currentPergunta?.textoPergunta}
+            {/* Área de conversa */}
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+              <div className="flex-1 overflow-y-auto p-3">
+                {error && (
+                  <p className="mb-2 rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
+                    {error}
                   </p>
-                  <input
-                    type={inputType}
-                    value={currentValue}
-                    onChange={(e) => setCurrentValue(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleNext()}
-                    placeholder={
-                      currentPergunta?.tipoCampo === 1
-                        ? "(00) 00000-0000"
-                        : currentPergunta?.tipoCampo === 2
-                          ? "seu@email.com"
-                          : "Digite aqui..."
-                    }
-                    className="rounded-lg border border-[var(--border)] px-3 py-2 text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--green)] focus:outline-none focus:ring-1 focus:ring-[var(--green)]"
-                    disabled={sending}
-                    autoFocus
-                  />
-                  <button
-                    type="button"
-                    onClick={handleNext}
-                    disabled={!currentValue.trim() || sending}
-                    className="mt-4 rounded-lg bg-[var(--green)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--green-dark)] disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:outline-none"
-                  >
-                    {sending
-                      ? "Enviando..."
-                      : isLastStep
-                        ? "Enviar"
-                        : "Próximo"}
-                  </button>
-                </>
+                )}
+                {finalMessage ? (
+                  <div className="flex gap-2">
+                    <span className="flex h-7 w-7 shrink-0 overflow-hidden rounded-full">
+                      <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
+                    </span>
+                    <p className="rounded-2xl rounded-bl-md bg-[var(--page)] px-3 py-2 text-sm text-[var(--text)]">
+                      {finalMessage}
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    {/* Mensagem inicial (Ana) */}
+                    <div className="mb-3 flex gap-2">
+                      <span className="flex h-7 w-7 shrink-0 overflow-hidden rounded-full">
+                        <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
+                      </span>
+                      <p className="rounded-2xl rounded-bl-md bg-[var(--page)] px-3 py-2 text-sm text-[var(--text)]">
+                        {config.textoBotaoInicial}
+                      </p>
+                    </div>
+                    {/* Respostas já dadas (usuário) */}
+                    {respostas.map((r, i) => (
+                      <div key={i} className="mb-2 flex justify-end">
+                        <span className="rounded-2xl rounded-br-md bg-[var(--green)] px-3 py-2 text-sm text-white">
+                          {r}
+                        </span>
+                      </div>
+                    ))}
+                    {/* Pergunta atual (Ana) */}
+                    <div className="mb-3 flex gap-2">
+                      <span className="flex h-7 w-7 shrink-0 overflow-hidden rounded-full">
+                        <img src={avatarSrc} alt="" className="h-full w-full object-cover" />
+                      </span>
+                      <p className="rounded-2xl rounded-bl-md bg-[var(--page)] px-3 py-2 text-sm font-medium text-[var(--text)]">
+                        {currentPergunta?.textoPergunta}
+                      </p>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Input fixo no rodapé */}
+              {!finalMessage && (
+                <div className="shrink-0 border-t border-[var(--border)] p-3">
+                  <div className="flex gap-2">
+                    <input
+                      type={inputType}
+                      value={currentValue}
+                      onChange={(e) => setCurrentValue(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleNext()}
+                      placeholder="Sua resposta..."
+                      className="min-w-0 flex-1 rounded-xl border border-[var(--border)] px-3 py-2.5 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--green)] focus:outline-none focus:ring-1 focus:ring-[var(--green)]"
+                      disabled={sending}
+                      autoFocus
+                    />
+                    <button
+                      type="button"
+                      onClick={handleNext}
+                      disabled={!currentValue.trim() || sending}
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--green)] text-white hover:bg-[var(--green-dark)] disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:outline-none"
+                      aria-label="Enviar"
+                    >
+                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9 2zm0 0v-8" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               )}
             </div>
           </div>
