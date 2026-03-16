@@ -28,7 +28,7 @@ export function BlogHeader({ blog }: BlogHeaderProps) {
   return (
     <header
       className={`sticky top-0 z-50 border-b border-[var(--border)] transition-[background-color,border-color,box-shadow] duration-200 ${
-        scrolled ? "border-[var(--border)] bg-white/80 shadow-[var(--shadow-sm)] backdrop-blur-md" : "bg-[var(--bg)]"
+        scrolled ? "border-[var(--border)] bg-[var(--bg)] shadow-[var(--shadow-sm)] backdrop-blur-md" : "bg-[var(--bg)]"
       }`}
     >
       <div className="mx-auto flex min-h-[4.5rem] max-w-[var(--content-width-wide)] items-center justify-between gap-4 px-4 py-4 sm:min-h-[5rem] sm:px-6">

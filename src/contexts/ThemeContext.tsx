@@ -29,9 +29,6 @@ function getInitialTheme(): Theme {
   } catch {
     // ignore storage errors
   }
-  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    return "dark";
-  }
   return "light";
 }
 

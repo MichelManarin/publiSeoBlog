@@ -140,7 +140,7 @@ export function ConversorWidget({ blogExternalId, articleId }: ConversorWidgetPr
       <div className="fixed bottom-6 right-6 z-40 flex items-end gap-0">
         {!bubbleDismissed && (
           <span
-            className="conversor-bubble order-1 relative max-w-[260px] rounded-2xl bg-white px-4 py-3 pr-8 text-left text-sm leading-relaxed text-[var(--text)] shadow-lg ring-1 ring-[var(--border)] sm:max-w-[280px]"
+            className="conversor-bubble order-1 relative max-w-[260px] rounded-2xl bg-[var(--card)] px-4 py-3 pr-8 text-left text-sm leading-relaxed text-[var(--text)] shadow-lg ring-1 ring-[var(--border)] sm:max-w-[280px]"
             role="button"
             tabIndex={0}
             onClick={() => setOpen(true)}
@@ -195,7 +195,7 @@ export function ConversorWidget({ blogExternalId, articleId }: ConversorWidgetPr
           <div className="absolute inset-0 bg-black/15 backdrop-blur-[2px]" aria-hidden />
 
           <div
-            className="conversor-chat-box relative flex h-[420px] w-full max-w-[380px] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 transition-all duration-200 ease-out"
+            className="conversor-chat-box relative flex h-[420px] w-full max-w-[380px] flex-col overflow-hidden rounded-2xl bg-[var(--card)] shadow-2xl ring-1 ring-[var(--border)] transition-all duration-200 ease-out"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Cabeçalho */}
@@ -230,7 +230,7 @@ export function ConversorWidget({ blogExternalId, articleId }: ConversorWidgetPr
             <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
               <div className="flex-1 overflow-y-auto p-3">
                 {error && (
-                  <p className="mb-2 rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
+                  <p className="mb-2 rounded-lg bg-[var(--page)] px-3 py-2 text-xs text-red-700">
                     {error}
                   </p>
                 )}

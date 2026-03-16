@@ -207,7 +207,7 @@ body {
   right: -8px;
   bottom: 20px;
   border: 8px solid transparent;
-  border-left-color: white;
+  border-left-color: var(--card);
   border-right-width: 0;
 }
 
