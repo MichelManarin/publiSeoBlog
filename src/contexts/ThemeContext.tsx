@@ -1,4 +1,4 @@
-\"use client\";
+"use client";
 
 import {
   createContext,
@@ -7,9 +7,9 @@ import {
   useEffect,
   useState,
   type ReactNode,
-} from \"react\";
+} from "react";
 
-type Theme = \"light\" | \"dark\";
+type Theme = "light" | "dark";
 
 interface ThemeContextValue {
   theme: Theme;
@@ -17,22 +17,22 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
-  theme: \"light\",
+  theme: "light",
   toggleTheme: () => {},
 });
 
 function getInitialTheme(): Theme {
-  if (typeof window === \"undefined\") return \"light\";
+  if (typeof window === "undefined") return "light";
   try {
-    const stored = window.localStorage.getItem(\"publiseo-theme\");
-    if (stored === \"light\" || stored === \"dark\") return stored;
+    const stored = window.localStorage.getItem("publiseo-theme");
+    if (stored === "light" || stored === "dark") return stored;
   } catch {
-    // ignore
+    // ignore storage errors
   }
-  if (window.matchMedia && window.matchMedia(\"(prefers-color-scheme: dark)\").matches) {
-    return \"dark\";
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    return "dark";
   }
-  return \"light\";
+  return "light";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -42,14 +42,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement;
     root.dataset.theme = theme;
     try {
-      window.localStorage.setItem(\"publiseo-theme\", theme);
+      window.localStorage.setItem("publiseo-theme", theme);
     } catch {
-      // ignore
+      // ignore storage errors
     }
   }, [theme]);
 
   const toggleTheme = useCallback(() => {
-    setTheme((prev) => (prev === \"light\" ? \"dark\" : \"light\"));
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
   }, []);
 
   return (

@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import "./globals.css";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { getRequestDominio, getBlogPorDominio } from "@/lib/blog-api";
-import { ThemeProvider } from "@/contexts/ThemeContext";
+import { ThemeProviderRoot } from "@/components/theme/ThemeProviderRoot";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -36,9 +36,9 @@ export default async function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${inter.variable} ${dmSerif.variable} font-sans antialiased`}>
-        <ThemeProvider>
+        <ThemeProviderRoot>
           <DashboardShell blog={blog}>{children}</DashboardShell>
-        </ThemeProvider>
+        </ThemeProviderRoot>
       </body>
     </html>
   );
