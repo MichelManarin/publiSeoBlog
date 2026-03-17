@@ -3,6 +3,7 @@ import { Inter, DM_Serif_Display } from "next/font/google";
 import { headers } from "next/headers";
 import "./globals.css";
 import { DashboardShell } from "@/components/layout/DashboardShell";
+import { HeadIntegrations } from "@/components/layout/HeadIntegrations";
 import { getRequestDominio, getBlogPorDominio } from "@/lib/blog-api";
 import { ThemeProviderRoot } from "@/components/theme/ThemeProviderRoot";
 
@@ -35,6 +36,9 @@ export default async function RootLayout({
 
   return (
     <html lang="pt-BR">
+      <head>
+        <HeadIntegrations integracoes={blog?.integracoes ?? []} />
+      </head>
       <body className={`${inter.variable} ${dmSerif.variable} font-sans antialiased`}>
         <ThemeProviderRoot>
           <DashboardShell blog={blog}>{children}</DashboardShell>

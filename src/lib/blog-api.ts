@@ -8,16 +8,28 @@ const API_BASE =
   process.env.NEXT_PUBLIC_PUBLISEO_API_URL ||
   "https://publiseobackend-production.up.railway.app";
 
+export interface IntegracaoHead {
+  tipo: string;
+  valor: string;
+}
+
 export interface BlogInfo {
   externalId: string;
   nome: string;
   nicho?: string;
   descricao?: string;
+  integracoes?: IntegracaoHead[];
 }
 
 export interface ApiBlogPorDominioResponse {
   success: boolean;
-  data: { externalId: string; nome?: string; nicho?: string; descricao?: string } | null;
+  data: {
+    externalId: string;
+    nome?: string;
+    nicho?: string;
+    descricao?: string;
+    integracoes?: IntegracaoHead[];
+  } | null;
   statusCode: number;
   message: string | null;
   errors: unknown;
@@ -136,6 +148,7 @@ export async function getBlogPorDominio(
       nome: json.data.nome ?? "",
       nicho: json.data.nicho,
       descricao: json.data.descricao,
+      integracoes: json.data.integracoes ?? [],
     };
   }
   if (process.env.NODE_ENV === "development") {
